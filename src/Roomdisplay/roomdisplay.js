@@ -51,24 +51,24 @@ class Roomdisplay {
 	actionMakeTicketPhrase({
 		ticket, workstation
 	}) {
+
 		let [letters, numbers] = _.split(ticket.label, '-');
 		let tick_letters = _.split(letters, '');
 		let number = _.parseInt(numbers);
 		let tick_numbers = [];
 		let parse = (num, power) => {
-			console.log("PARSE", num, power);
 			let div = Math.pow(10, power);
-			console.log("LOG", div);
 			let rem = num % div;
-			if(rem < 20) {
-				tick_numbers.push(rem);
-				return tick_numbers;
-			}
 			let base = num - rem;
 			tick_numbers.push(base);
-			return parse(rem, power + 1);
+			if(num < 20) {
+				tick_numbers.push(num);
+				return tick_numbers;
+			}
+			return parse(rem, power - 1);
 		};
-		tick_numbers = parse(number, 1);
+
+		tick_numbers = _.uniq(_.filter(parse(number, 5)));
 		console.log("NUM", tick_numbers);
 		let dir = workstation.short_label || _.last(_.words(workstation.device_label));
 		let fnames = [this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, this.theme_params.direction, dir];
