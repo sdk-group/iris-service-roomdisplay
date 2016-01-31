@@ -8,6 +8,35 @@ let randomstring = require('randomstring');
 class Roomdisplay {
 	constructor() {
 		this.emitter = emitter;
+
+		this.emitter.on('roomdisplay.emit.ticket-call', ({
+			ticket,
+			workstation,
+			org_addr
+		}) => {
+			this.emitter.addTask('agent', {
+					_action: 'active-agents',
+					agent_type: 'SystemEntity'
+				})
+				.then((res) => {
+					return Promise.props(_.mapValues(res, (val, user_id) => {
+						return this.actionCallTicket({
+								ticket, workstation
+							})
+							.then((res) => {
+								console.log("EMITTING RD", res, user_id, org_addr);
+								let addr = _.defaults(org_addr, {
+									office: 'null',
+									department: 'null'
+								});
+								this.emitter.emit('broadcast', {
+									event: _.join(['call.ticket', addr.office, addr.department, _.last(user_id.split("#"))], "."),
+									data: res
+								});
+							});
+					}))
+				});
+		});
 	}
 
 	init({
