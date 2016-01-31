@@ -82,7 +82,7 @@ class Roomdisplay {
 	}) {
 
 		let [letters, numbers] = _.split(ticket.label, '-');
-		let tick_letters = _.split(letters, '');
+		let tick_letters = _.split(_.lowerCase(letters), '');
 		let number = _.parseInt(numbers);
 		let tick_numbers = [];
 		let parse = (num, power) => {
@@ -192,8 +192,6 @@ class Roomdisplay {
 	actionReady({
 		user_id, office, workstation
 	}) {
-		console.log("READY FOR ACTION - RD", user_id, office);
-
 		return Promise.resolve({
 			success: true
 		});
