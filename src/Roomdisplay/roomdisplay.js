@@ -53,8 +53,23 @@ class Roomdisplay {
 	}) {
 		let [letters, numbers] = _.split(ticket.label, '-');
 		let tick_letters = _.split(letters, '');
-		let num = _.parseInt(numbers);
+		let number = _.parseInt(numbers);
 		let tick_numbers = [];
+		let parse = (num, power) => {
+			console.log("PARSE", num, power);
+			let div = Math.pow(10, power);
+			console.log("LOG", div);
+			let rem = num % div;
+			if(rem < 20) {
+				tick_numbers.push(rem);
+				return tick_numbers;
+			}
+			let base = num - rem;
+			tick_numbers.push(base);
+			return parse(rem, power + 1);
+		};
+		tick_numbers = parse(number, 1);
+		console.log("NUM", tick_numbers);
 		let dir = workstation.short_label || _.last(_.words(workstation.device_label));
 		let fnames = [this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, this.theme_params.direction, dir];
 		fnames = _.map(_.flatten(fnames), (n) => (n + this.theme_params.extension));
@@ -144,6 +159,17 @@ class Roomdisplay {
 				});
 			});
 	}
+
+	actionReady({
+		user_id, office, workstation
+	}) {
+		console.log("READY FOR ACTION - RD", user_id, office);
+
+		return Promise.resolve({
+			success: true
+		});
+	}
+
 }
 
 module.exports = Roomdisplay;
