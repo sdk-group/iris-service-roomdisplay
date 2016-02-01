@@ -136,9 +136,12 @@ class Roomdisplay {
 					ticket: tick,
 					workstation: ws,
 					voice: this.actionMakeTicketPhrase({
-						ticket: tick,
-						workstation: ws
-					})
+							ticket: tick,
+							workstation: ws
+						})
+						.then((name) => {
+							return path.relative('/var/www/html/', name);
+						})
 				});
 			})
 	}
