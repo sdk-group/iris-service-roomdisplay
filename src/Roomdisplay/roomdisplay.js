@@ -46,7 +46,7 @@ class Roomdisplay {
 			gong: "REMINDER",
 			invitation: "номер",
 			direction: "окно",
-			extension: ".wav"
+			extension: ".mp3"
 		};
 		this.sound_theme = sound_theme;
 		this.theme_params = _.reduce(def_theme, (acc, value, key) => {
@@ -98,7 +98,6 @@ class Roomdisplay {
 		};
 
 		tick_numbers = _.uniq(_.filter(parse(number, 5)));
-		console.log("NUM", tick_numbers);
 		let dir = workstation.short_label || _.last(_.words(workstation.device_label));
 		let fnames = [this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, this.theme_params.direction, dir];
 		fnames = _.map(_.flatten(fnames), (n) => (n + this.theme_params.extension));
