@@ -52,7 +52,7 @@ class Roomdisplay {
 		this.theme_params = _.reduce(def_theme, (acc, value, key) => {
 			let val = _.isUndefined(theme_params[key]) ? value : theme_params[key];
 			if(!!~_.indexOf(['gong', 'invitation', 'direction'], key)) {
-				val = key + '/' + _.lowerCase(val);
+				val = key + '/' + (val);
 			}
 			acc[key] = val;
 			return acc;
