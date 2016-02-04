@@ -4,6 +4,7 @@ let emitter = require("global-queue");
 let ServiceApi = require('resource-management-framework').ServiceApi;
 let path = require('path');
 let randomstring = require('randomstring');
+let fs = Promise.promisifyAll(require("fs"));
 
 class Roomdisplay {
 	constructor() {
@@ -21,10 +22,11 @@ class Roomdisplay {
 				.then((res) => {
 					return Promise.props(_.mapValues(res, (val, user_id) => {
 						return this.actionCallTicket({
-								ticket, workstation
+								ticket,
+								workstation
 							})
 							.then((res) => {
-								console.log("EMITTING RD", res, user_id, org_addr);
+								// console.log("EMITTING RD", res, user_id, org_addr);
 								let addr = _.defaults(org_addr, {
 									office: 'null',
 									department: 'null'
@@ -40,7 +42,8 @@ class Roomdisplay {
 	}
 
 	init({
-		sound_theme, theme_params
+		sound_theme,
+		theme_params
 	}) {
 		let def_theme = {
 			gong: "REMINDER",
@@ -63,7 +66,9 @@ class Roomdisplay {
 
 	//API
 	actionTicketCalled({
-		ticket, user_id, reason
+		ticket,
+		user_id,
+		reason
 	}) {
 		let data = {
 			event_name: "call.ticket",
@@ -79,7 +84,8 @@ class Roomdisplay {
 	}
 
 	actionMakeTicketPhrase({
-		ticket, workstation
+		ticket,
+		workstation
 	}) {
 
 		let [letters, numbers] = _.split(ticket.label, '-');
@@ -113,7 +119,8 @@ class Roomdisplay {
 	}
 
 	actionCallTicket({
-		ticket, workstation
+		ticket,
+		workstation
 	}) {
 		return Promise.props({
 				ticket: this.emitter.addTask('ticket', {
@@ -193,7 +200,8 @@ class Roomdisplay {
 	}
 
 	actionReady({
-		user_id, office, workstation
+		user_id,
+		workstation
 	}) {
 		return Promise.resolve({
 			success: true
