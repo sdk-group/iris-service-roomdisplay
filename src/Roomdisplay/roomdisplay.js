@@ -89,18 +89,21 @@ class Roomdisplay {
 	}) {
 
 		let [letters, numbers] = _.split(ticket.label, '-');
+		numbers = numbers || letters;
 		let tick_letters = _.split(_.lowerCase(letters), '');
 		let number = _.parseInt(numbers);
 		let tick_numbers = [];
 		let parse = (num, power) => {
-			let div = Math.pow(10, power);
-			let rem = num % div;
-			let base = num - rem;
-			tick_numbers.push(base);
 			if(num < 20) {
 				tick_numbers.push(num);
 				return tick_numbers;
 			}
+
+			let div = Math.pow(10, power);
+			let rem = num % div;
+			let base = num - rem;
+			tick_numbers.push(base);
+
 			return parse(rem, power - 1);
 		};
 
