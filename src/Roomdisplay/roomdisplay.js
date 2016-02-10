@@ -161,44 +161,19 @@ class Roomdisplay {
 		user_id,
 		user_type = "SystemEntity"
 	}) {
-		let cp;
-		return this.emitter.addTask('workstation', {
-				_action: 'by-id',
-				user_id,
-				user_type,
-				workstation
+		return Promise.props({
+				ws: this.emitter.addTask('workstation', {
+						_action: 'occupy',
+						user_id,
+						user_type,
+						workstation
+					})
+					.then((res) => {
+						return res.workstation;
+					})
 			})
-			.then((res) => {
-				cp = _.find(res, (val) => (val.device_type === 'roomdisplay'));
-				return this.iris.getOrganizationChain({
-					keys: cp.attached_to
-				});
-			})
-			.then((res) => {
-				let org_data = _.reduce(_.orderBy(_.keys(res), _.parseInt, 'desc'), (acc, val) => {
-					acc = _.merge(acc, res[val]);
-					return acc;
-				}, {});
-
-				return Promise.props({
-					office: res,
-					timezone: org_data.org_timezone,
-					current_time: this.emitter.addTask('queue', {
-						_action: 'current-time'
-					}),
-					services: this.iris.getService({
-						query: {}
-					}),
-					ws: this.emitter.addTask('workstation', {
-							_action: 'occupy',
-							user_id,
-							user_type,
-							workstation
-						})
-						.then((res) => {
-							return res.workstation;
-						})
-				});
+			.catch(err => {
+				console.log("RD BTSTRP ERR", err.stack);
 			});
 	}
 
