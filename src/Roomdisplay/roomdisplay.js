@@ -164,7 +164,7 @@ class Roomdisplay {
 					ticket: tick,
 					workstation: ws,
 					voice: fpath,
-					duration: this.getAudioLength(fpath)
+					voice_duration: this.getAudioLength(fpath)
 				});
 			});
 	}
