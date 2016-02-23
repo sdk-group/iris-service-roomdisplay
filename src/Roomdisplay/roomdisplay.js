@@ -66,13 +66,16 @@ class Roomdisplay {
 	}
 
 	//API
-	getAudioLength(fpath) {
+	getAudioLength(fpath, default_duration = 0) {
 		return this.emitter.addTask('sound-conjunct', {
 				_action: 'audio-metadata',
 				fpath
 			})
 			.then((res) => {
 				return res.audio ? res.audio.length : 0;
+			})
+			.catch((err) => {
+				return default_duration;
 			});
 	}
 
@@ -164,7 +167,7 @@ class Roomdisplay {
 					ticket: tick,
 					workstation: ws,
 					voice: fpath,
-					voice_duration: this.getAudioLength(fpath)
+					voice_duration: this.getAudioLength(fpath, ws.default_voice_duration)
 				});
 			});
 	}
