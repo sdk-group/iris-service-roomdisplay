@@ -29,7 +29,7 @@
   "devDependencies": {
     "Couchbird": "git+https://github.com/YuuKohaku/Couchbird.git",
     "babel-preset-es2015-node5": "^1.1.2",
-    "babel-preset-node5": "^10.5.0",
+    "babel-preset-node5": "^10.6.0",
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
@@ -48,7 +48,7 @@
     "global-queue": "git+https://github.com/artificial-life/global-queue",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
-    "lodash": "^4.3.0",
+    "lodash": "^4.5.1",
     "randomstring": "^1.1.4",
     "resource-management-framework": "git+https://github.com/YuuKohaku/rmf-on-rdf.git"
   }
