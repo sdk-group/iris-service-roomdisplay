@@ -55,7 +55,7 @@ class Roomdisplay {
 		this.sound_theme = sound_theme;
 		this.theme_params = _.reduce(def_theme, (acc, value, key) => {
 			let val = _.isUndefined(theme_params[key]) ? value : theme_params[key];
-			if (!!~_.indexOf(['gong', 'invitation', 'direction'], key)) {
+			if(!!~_.indexOf(['gong', 'invitation', 'direction'], key)) {
 				val = key + '/' + (val);
 			}
 			acc[key] = val;
@@ -66,6 +66,16 @@ class Roomdisplay {
 	}
 
 	//API
+	getAudioLength(fpath) {
+		return this.emitter.addTask('sound-conjunct', {
+				_action: 'audio-metadata',
+				fpath
+			})
+			.then((res) => {
+				return res.audio ? res.audio.length : 0;
+			});
+	}
+
 	actionTicketCalled({
 		ticket,
 		user_id,
@@ -91,7 +101,7 @@ class Roomdisplay {
 		let number = _.parseInt(numbers);
 		let tick_numbers = [];
 		let parse = (num, power) => {
-			if (num < 20) {
+			if(num < 20) {
 				tick_numbers.push(num);
 				return tick_numbers;
 			}
@@ -111,6 +121,7 @@ class Roomdisplay {
 		fnames = _.map(fnames, (n) => (n + this.theme_params.extension));
 		let outname = nm + this.theme_params.extension;
 
+
 		return this.emitter.addTask('sound-conjunct', {
 			_action: 'make-phrase',
 			sound_theme: this.sound_theme,
@@ -123,6 +134,8 @@ class Roomdisplay {
 		ticket,
 		workstation
 	}) {
+		let tick;
+		let ws;
 		return Promise.props({
 				ticket: this.emitter.addTask('ticket', {
 					_action: 'ticket',
@@ -134,24 +147,26 @@ class Roomdisplay {
 				})
 			})
 			.then((res) => {
-				let tick = _.find(res.ticket, (t) => (
+				tick = _.find(res.ticket, (t) => (
 					t.id == ticket || t.key == ticket
 				));
-				let ws = _.find(res.workstation, (t) => (
+				ws = _.find(res.workstation, (t) => (
 					t.id == workstation || t.key == workstation
 				));
+				return this.actionMakeTicketPhrase({
+					ticket: tick,
+					workstation: ws
+				});
+			})
+			.then((name) => {
+				let fpath = name ? path.relative('/var/www/html/', name) : name;
 				return Promise.props({
 					ticket: tick,
 					workstation: ws,
-					voice: this.actionMakeTicketPhrase({
-							ticket: tick,
-							workstation: ws
-						})
-						.then((name) => {
-							return path.relative('/var/www/html/', name);
-						})
+					voice: fpath,
+					duration: this.getAudioLength(fpath)
 				});
-			})
+			});
 	}
 
 	actionBootstrap({
