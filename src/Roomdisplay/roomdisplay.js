@@ -77,7 +77,7 @@ class Roomdisplay {
 				fpath
 			})
 			.then((res) => {
-				return res.audio ? res.audio.length : 0;
+				return res.audio ? res.audio.length * 1000 : 0;
 			})
 			.catch((err) => {
 				return default_duration;
