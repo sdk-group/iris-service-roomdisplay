@@ -50,6 +50,7 @@
     "gulp-babel": "^6.1.2",
     "lodash": "^4.5.1",
     "randomstring": "^1.1.4",
-    "resource-management-framework": "git+https://github.com/YuuKohaku/rmf-on-rdf.git"
+    "resource-management-framework": "git+https://github.com/YuuKohaku/rmf-on-rdf.git",
+    "transliteration": "^0.1.1"
   }
 }

@@ -6,6 +6,7 @@ let ServiceApi = require('resource-management-framework')
 let path = require('path');
 let randomstring = require('randomstring');
 let fs = Promise.promisifyAll(require("fs"));
+let slugify = require('transliteration').slugify;
 
 class Roomdisplay {
 	constructor() {
@@ -122,8 +123,10 @@ class Roomdisplay {
 		let fnames = _.flatten([this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, this.theme_params.direction, dir]);
 		let nm = _.join(_.map(fnames, (n) => _.last(_.split(n, "/"))), "_");
 		fnames = _.map(fnames, (n) => (n + this.theme_params.extension));
-		let outname = nm + this.theme_params.extension;
-
+		let outname = slugify(nm, {
+			lowercase: true,
+			separator: '_'
+		}) + this.theme_params.extension;
 
 		return this.emitter.addTask('sound-conjunct', {
 			_action: 'make-phrase',
