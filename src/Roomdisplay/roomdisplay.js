@@ -106,9 +106,10 @@ class Roomdisplay {
 
 		tick_numbers = _.uniq(_.filter(parse(number, 5)));
 		let dir = workstation.short_label || _.last(_.words(workstation.device_label));
-		let fnames = [this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, this.theme_params.direction, dir];
-		fnames = _.map(_.flatten(fnames), (n) => (n + this.theme_params.extension));
-		let outname = randomstring.generate(20) + this.theme_params.extension;
+		let fnames = _.flatten([this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, this.theme_params.direction, dir]);
+		let nm = _.join(_.map(fnames, (n) => _.last(_.split(n, "/"))), "_");
+		fnames = _.map(fnames, (n) => (n + this.theme_params.extension));
+		let outname = nm + this.theme_params.extension;
 
 		return this.emitter.addTask('sound-conjunct', {
 			_action: 'make-phrase',
