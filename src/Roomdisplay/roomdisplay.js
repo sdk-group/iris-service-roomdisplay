@@ -34,7 +34,7 @@ class Roomdisplay {
 									department: 'null'
 								});
 								this.emitter.emit('broadcast', {
-									event: _.join(['call.ticket', addr.office, addr.department, _.last(user_id.split("#"))], "."),
+									event: _.join(['call.ticket', addr.office, addr.department, user_id], "."),
 									data: res
 								});
 							});
@@ -170,7 +170,7 @@ class Roomdisplay {
 					ticket: tick,
 					workstation: ws,
 					voice: fpath,
-					voice_duration: this.getAudioLength(fpath, ws.default_voice_duration)
+					voice_duration: this.getAudioLength(name, ws.default_voice_duration)
 				});
 			});
 	}
