@@ -104,8 +104,14 @@ class Roomdisplay {
 		workstation
 	}) {
 
-		let [letters, numbers] = _.split(ticket.label, '-');
-		numbers = numbers || letters;
+		let parts = _.split(ticket.label, '-');
+		let letters = '';
+		let numbers;
+		if (_.size(parts) == 1) {
+			[numbers] = parts;
+		} else {
+			[letters, numbers] = parts;
+		}
 		let tick_letters = _.split(_.lowerCase(letters), '');
 		let number = _.parseInt(numbers);
 		let tick_numbers = [];
