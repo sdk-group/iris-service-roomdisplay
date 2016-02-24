@@ -6,7 +6,8 @@ let ServiceApi = require('resource-management-framework')
 let path = require('path');
 let randomstring = require('randomstring');
 let fs = Promise.promisifyAll(require("fs"));
-let slugify = require('transliteration').slugify;
+let slugify = require('transliteration')
+	.slugify;
 
 class Roomdisplay {
 	constructor() {
@@ -34,8 +35,8 @@ class Roomdisplay {
 									department: false
 								});
 								let to_join = ['call.ticket'];
-								if(addr.office) to_join.push(addr.office);
-								if(addr.department) to_join.push(addr.department);
+								if (addr.office) to_join.push(addr.office);
+								if (addr.department) to_join.push(addr.department);
 								to_join.push(user_id);
 								this.emitter.emit('broadcast', {
 									event: _.join(to_join, "."),
@@ -60,7 +61,7 @@ class Roomdisplay {
 		this.sound_theme = sound_theme;
 		this.theme_params = _.reduce(def_theme, (acc, value, key) => {
 			let val = _.isUndefined(theme_params[key]) ? value : theme_params[key];
-			if(!!~_.indexOf(['gong', 'invitation', 'direction'], key)) {
+			if (!!~_.indexOf(['gong', 'invitation', 'direction'], key)) {
 				val = key + '/' + (val);
 			}
 			acc[key] = val;
@@ -109,7 +110,7 @@ class Roomdisplay {
 		let number = _.parseInt(numbers);
 		let tick_numbers = [];
 		let parse = (num, power) => {
-			if(num < 20) {
+			if (num < 20) {
 				tick_numbers.push(num);
 				return tick_numbers;
 			}
