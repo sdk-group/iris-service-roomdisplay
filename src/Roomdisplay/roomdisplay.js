@@ -85,18 +85,21 @@ class Roomdisplay {
 			});
 	}
 
-	actionTicketCalled({
+	actionReportPlayed({
 		ticket,
 		user_id,
-		reason
+		success
 	}) {
-		let data = {
-			event_name: "call.ticket",
-			subject: user_id,
+		let status = success ? 'success' : 'fail';
+		this.emitter.emit('history.log', {
+			subject: {
+				type: 'roomdisplay',
+				id: user_id
+			},
 			object: ticket,
-			reason
-		};
-
+			event_name: `call-${status}`,
+			reason: {}
+		});
 	}
 
 	actionMakeTicketPhrase({
