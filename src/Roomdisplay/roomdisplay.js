@@ -12,7 +12,32 @@ let slugify = require('transliteration')
 class Roomdisplay {
 	constructor() {
 		this.emitter = emitter;
+	}
 
+	init({
+		sound_theme,
+		theme_params
+	}) {
+		let def_theme = {
+			gong: "REMINDER",
+			invitation: "номер",
+			direction: "окно",
+			extension: ".mp3"
+		};
+		this.sound_theme = sound_theme;
+		this.theme_params = _.reduce(def_theme, (acc, value, key) => {
+			let val = _.isUndefined(theme_params[key]) ? value : theme_params[key];
+			if (!!~_.indexOf(['gong', 'invitation', 'direction'], key)) {
+				val = key + '/' + (val);
+			}
+			acc[key] = val;
+			return acc;
+		}, {});
+		this.iris = new ServiceApi();
+		this.iris.initContent();
+	}
+
+	launch() {
 		this.emitter.on('roomdisplay.emit.ticket-call', ({
 			ticket,
 			workstation,
@@ -46,30 +71,9 @@ class Roomdisplay {
 					}))
 				});
 		});
+		return Promise.resolve(true);
 	}
 
-	init({
-		sound_theme,
-		theme_params
-	}) {
-		let def_theme = {
-			gong: "REMINDER",
-			invitation: "номер",
-			direction: "окно",
-			extension: ".mp3"
-		};
-		this.sound_theme = sound_theme;
-		this.theme_params = _.reduce(def_theme, (acc, value, key) => {
-			let val = _.isUndefined(theme_params[key]) ? value : theme_params[key];
-			if (!!~_.indexOf(['gong', 'invitation', 'direction'], key)) {
-				val = key + '/' + (val);
-			}
-			acc[key] = val;
-			return acc;
-		}, {});
-		this.iris = new ServiceApi();
-		this.iris.initContent();
-	}
 
 	//API
 	getAudioLength(fpath, default_duration = 0) {
