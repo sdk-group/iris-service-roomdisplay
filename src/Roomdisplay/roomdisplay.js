@@ -55,14 +55,7 @@ class Roomdisplay {
 							})
 							.then((res) => {
 								// console.log("EMITTING RD", res, user_id, org_addr);
-								let addr = _.defaults(org_addr, {
-									office: false,
-									department: false
-								});
-								let to_join = ['call.ticket'];
-								if (addr.office) to_join.push(addr.office);
-								if (addr.department) to_join.push(addr.department);
-								to_join.push(user_id);
+								let to_join = ['call.ticket', org_addr, user_id];
 								this.emitter.emit('broadcast', {
 									event: _.join(to_join, "."),
 									data: res
