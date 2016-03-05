@@ -48,8 +48,8 @@ class Roomdisplay {
 					agent_type: 'SystemEntity'
 				})
 				.then((res) => {
-					return Promise.props(_.mapValues(res, (val, user_id) => {
-						return this.actionCallTicket({
+					return Promise.props(_.reduce(res, (acc, user_id) => {
+						acc[user_id] = this.actionCallTicket({
 								ticket,
 								workstation
 							})
@@ -61,7 +61,8 @@ class Roomdisplay {
 									data: res
 								});
 							});
-					}))
+						return acc;
+					}, {}))
 				});
 		});
 		return Promise.resolve(true);
