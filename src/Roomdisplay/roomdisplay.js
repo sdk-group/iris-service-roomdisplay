@@ -16,7 +16,8 @@ class Roomdisplay {
 
 	init({
 		sound_theme,
-		theme_params
+		theme_params,
+		data_server
 	}) {
 		let def_theme = {
 			gong: "REMINDER",
@@ -24,6 +25,8 @@ class Roomdisplay {
 			direction: "окно",
 			extension: ".mp3"
 		};
+
+		this.data_server = data_server;
 		this.sound_theme = sound_theme;
 		this.theme_params = _.reduce(def_theme, (acc, value, key) => {
 			let val = _.isUndefined(theme_params[key]) ? value : theme_params[key];
@@ -178,6 +181,7 @@ class Roomdisplay {
 			})
 			.then((name) => {
 				let fpath = name ? path.relative('/var/www/html/', name) : name;
+				fpath = this.data_server ? this.data_server + fpath : fpath;
 				return Promise.props({
 					ticket: tick,
 					workstation: ws,
