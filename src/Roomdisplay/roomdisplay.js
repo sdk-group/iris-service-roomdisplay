@@ -197,7 +197,7 @@ class Roomdisplay {
 		user_type = "SystemEntity"
 	}) {
 		return Promise.props({
-				ws: this.emitter.addTask('workstation', {
+				workstation: this.emitter.addTask('workstation', {
 						_action: 'occupy',
 						user_id,
 						user_type,
