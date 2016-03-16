@@ -17,7 +17,8 @@ class Roomdisplay {
 	init({
 		sound_theme,
 		theme_params,
-		data_server
+		data_server,
+		number_speech_precision
 	}) {
 		let def_theme = {
 			gong: "REMINDER",
@@ -25,7 +26,7 @@ class Roomdisplay {
 			direction: "окно",
 			extension: ".mp3"
 		};
-
+		this.number_speech_precision = number_speech_precision || 5;
 		this.data_server = data_server;
 		this.sound_theme = sound_theme;
 		this.theme_params = _.reduce(def_theme, (acc, value, key) => {
@@ -133,8 +134,9 @@ class Roomdisplay {
 			return parse(rem, power - 1);
 		};
 
-		tick_numbers = _.uniq(_.filter(parse(number, 5)));
+		tick_numbers = _.uniq(_.filter(parse(number, this.number_speech_precision)));
 		let dir = workstation.short_label || _.last(_.words(workstation.device_label));
+		dir = _.uniq(_.filter(parse(_.parseInt(dir), this.number_speech_precision)));
 		let fnames = _.flatten([this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, this.theme_params.direction, dir]);
 		let nm = _.join(_.map(fnames, (n) => _.last(_.split(n, "/"))), "_");
 		fnames = _.map(fnames, (n) => (n + this.theme_params.extension));
