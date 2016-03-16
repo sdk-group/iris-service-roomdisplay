@@ -108,7 +108,7 @@ class Roomdisplay {
 		ticket,
 		workstation
 	}) {
-
+		// console.log("RD MAKE PHRASE", ticket, workstation);
 		let parts = _.split(ticket.label, '-');
 		let letters = '';
 		let numbers;
@@ -119,24 +119,25 @@ class Roomdisplay {
 		}
 		let tick_letters = _.split(_.lowerCase(letters), '');
 		let number = _.parseInt(numbers);
-		let tick_numbers = [];
-		let parse = (num, power) => {
+		let parse = (num, power, fin) => {
+			// console.log("NUMPOW", num, power);
 			if (num < 20) {
-				tick_numbers.push(num);
-				return tick_numbers;
+				fin.push(num);
+				return fin;
 			}
 
 			let div = Math.pow(10, power);
 			let rem = num % div;
 			let base = num - rem;
-			tick_numbers.push(base);
+			fin.push(base);
 
-			return parse(rem, power - 1);
+			return parse(rem, power - 1, fin);
 		};
 
-		tick_numbers = _.uniq(_.filter(parse(number, this.number_speech_precision)));
+		let tick_numbers = _.uniq(_.filter(parse(number, this.number_speech_precision, [])));
 		let dir = workstation.short_label || _.last(_.words(workstation.device_label));
-		dir = _.uniq(_.filter(parse(_.parseInt(dir), this.number_speech_precision)));
+		dir = _.uniq(_.filter(parse(_.parseInt(dir), this.number_speech_precision, [])));
+		// console.log("DIR", dir, workstation.short_label);
 		let fnames = _.flatten([this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, this.theme_params.direction, dir]);
 		let nm = _.join(_.map(fnames, (n) => _.last(_.split(n, "/"))), "_");
 		fnames = _.map(fnames, (n) => (n + this.theme_params.extension));
