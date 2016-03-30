@@ -45,30 +45,43 @@ class Roomdisplay {
 		this.emitter.on('roomdisplay.emit.ticket-call', ({
 			ticket,
 			workstation,
-			org_addr
+			org_addr,
+			org_merged
 		}) => {
-			this.emitter.addTask('agent', {
-					_action: 'active-agents',
-					agent_type: 'SystemEntity'
+			this.emitter.addTask('workstation', {
+					_action: 'get-workstations-cache',
+					device_type: 'roomdisplay'
 				})
 				.then((res) => {
-					return Promise.props(_.reduce(res, (acc, user_id) => {
-						acc[user_id] = this.actionCallTicket({
-								ticket,
-								workstation
-							})
-							.then((res) => {
-								// console.log("EMITTING RD", res, user_id, org_addr);
-								let to_join = ['roomdisplay.command', org_addr, user_id];
-								this.emitter.emit('broadcast', {
-									event: _.join(to_join, "."),
-									data: res
-								});
+					res = res['roomdisplay'];
+					let keys = _(res)
+						.filter(v => (v.attached_to == org_merged.id))
+						.map('id')
+						.value();
+
+					return this.emitter.addTask('workstation', {
+							_action: 'by-id',
+							workstation: keys
+						})
+						.then((res) => {
+							return Promise.map(_.values(res), (rd) => {
+								return this.actionCallTicket({
+										ticket,
+										workstation
+									})
+									.then((res) => {
+										let to_join = ['roomdisplay.command', org_addr, rd.id];
+										console.log("EMITTING RD", res, _.join(to_join, "."));
+										this.emitter.emit('broadcast', {
+											event: _.join(to_join, "."),
+											data: res
+										});
+									});
 							});
-						return acc;
-					}, {}))
+						});
 				});
 		});
+
 		return Promise.resolve(true);
 	}
 
