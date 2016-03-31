@@ -71,7 +71,7 @@ class Roomdisplay {
 									})
 									.then((res) => {
 										let to_join = ['roomdisplay.command', org_addr, rd.id];
-										console.log("EMITTING RD", res, _.join(to_join, "."));
+										// console.log("EMITTING RD", res, _.join(to_join, "."));
 										this.emitter.emit('broadcast', {
 											event: _.join(to_join, "."),
 											data: res
