@@ -50,7 +50,8 @@ class Roomdisplay {
 		}) => {
 			this.emitter.addTask('workstation', {
 					_action: 'get-workstations-cache',
-					device_type: 'roomdisplay'
+					device_type: 'roomdisplay',
+					organization: org_merged.id
 				})
 				.then((res) => {
 					res = res['roomdisplay'];
