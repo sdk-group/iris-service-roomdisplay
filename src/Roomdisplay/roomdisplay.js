@@ -107,15 +107,15 @@ class Roomdisplay {
 		success
 	}) {
 		let status = success ? 'success' : 'fail';
-		this.emitter.emit('history.log', {
-			subject: {
-				type: 'roomdisplay',
-				id: user_id
-			},
-			object: ticket,
-			event_name: `call-${status}`,
-			reason: {}
-		});
+		// this.emitter.emit('history.log', {
+		// 	subject: {
+		// 		type: 'roomdisplay',
+		// 		id: user_id
+		// 	},
+		// 	object: ticket,
+		// 	event_name: `call-${status}`,
+		// 	reason: {}
+		// });
 	}
 
 	actionMakeTicketPhrase({
