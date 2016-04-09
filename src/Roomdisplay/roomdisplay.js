@@ -1,6 +1,6 @@
 'use strict'
 
-let emitter = require("global-queue");
+
 let ServiceApi = require('resource-management-framework')
 	.ServiceApi;
 let path = require('path');
@@ -11,7 +11,7 @@ let slugify = require('transliteration')
 
 class Roomdisplay {
 	constructor() {
-		this.emitter = emitter;
+		this.emitter = message_bus;
 	}
 
 	init({
