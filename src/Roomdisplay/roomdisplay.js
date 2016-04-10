@@ -95,9 +95,6 @@ class Roomdisplay {
 			})
 			.then((res) => {
 				return res.audio ? res.audio.length * 1300 : 0;
-			})
-			.catch((err) => {
-				return default_duration;
 			});
 	}
 
@@ -214,19 +211,16 @@ class Roomdisplay {
 		user_type = "SystemEntity"
 	}) {
 		return Promise.props({
-				workstation: this.emitter.addTask('workstation', {
-						_action: 'occupy',
-						user_id,
-						user_type,
-						workstation
-					})
-					.then((res) => {
-						return res.workstation;
-					})
-			})
-			.catch(err => {
-				console.log("RD BTSTRP ERR", err.stack);
-			});
+			workstation: this.emitter.addTask('workstation', {
+					_action: 'occupy',
+					user_id,
+					user_type,
+					workstation
+				})
+				.then((res) => {
+					return res.workstation;
+				})
+		});
 	}
 
 	actionReady({
