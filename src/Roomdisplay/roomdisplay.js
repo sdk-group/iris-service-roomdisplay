@@ -184,12 +184,8 @@ class Roomdisplay {
 				})
 			})
 			.then((res) => {
-				tick = _.find(res.ticket, (t) => (
-					t.id == ticket || t.key == ticket
-				));
-				ws = _.find(res.workstation, (t) => (
-					t.id == workstation || t.key == workstation
-				));
+				tick = _.find(res.ticket, (t) => (t.id == ticket));
+				ws = _.find(res.workstation, (t) => (t.id == workstation));
 				return this.actionMakeTicketPhrase({
 					ticket: tick,
 					workstation: ws
