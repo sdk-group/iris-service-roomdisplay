@@ -120,7 +120,7 @@ class Roomdisplay {
 		workstation
 	}) {
 		// console.log("RD MAKE PHRASE", ticket, workstation);
-		if(!ticket.label || !workstation.short_label && !workstation.device_label)
+		if (!ticket || !workstation || !ticket.label || !workstation.short_label && !workstation.device_label)
 			return Promise.resolve(false);
 		let parts = _.split(ticket.label, '-');
 		let letters = '';
