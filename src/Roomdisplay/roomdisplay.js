@@ -117,13 +117,17 @@ class Roomdisplay {
 	}
 
 	actionMakeTicketPhrase({
-		ticket,
-		workstation
+		ticket = {},
+		workstation = {}
 	}) {
 		// console.log("RD MAKE PHRASE", ticket, workstation);
-		if (!ticket || !workstation || !ticket.label || _.isEmpty(ticket.label) || !(workstation.short_label || workstation.label) || _.isEmpty(workstation.short_label || workstation.label))
+		let tlabel = _.toString(ticket.label);
+		let wlabel = _.toString(workstation.short_label || _(workstation.label)
+			.words()
+			.last());
+		if (_.isEmpty(tlabel) || _.isEmpty(wlabel))
 			return Promise.resolve(false);
-		let parts = _.split(ticket.label, '-');
+		let parts = _.split(tlabel, '-');
 		let letters = '';
 		let numbers;
 		if (_.size(parts) == 1) {
@@ -149,8 +153,7 @@ class Roomdisplay {
 		};
 
 		let tick_numbers = _.isNumber(number) ? _.uniq(_.filter(parse(number, this.number_speech_precision, []))) : [];
-		let dir = workstation.short_label || _.last(_.words(workstation.label));
-		dir = _.uniq(_.filter(parse(_.parseInt(dir), this.number_speech_precision, [])));
+		let dir = _.uniq(_.filter(parse(_.parseInt(wlabel), this.number_speech_precision, [])));
 		// console.log("DIR", dir, workstation);
 		let fnames = _.flatten([this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, this.theme_params.direction, dir]);
 		let nm = _.join(_.map(fnames, (n) => _.last(_.split(n, "/"))), "_");
