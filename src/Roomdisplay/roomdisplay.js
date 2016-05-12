@@ -68,7 +68,8 @@ class Roomdisplay {
 							return Promise.map(_.values(res), (rd) => {
 								return this.actionCallTicket({
 										ticket,
-										workstation
+										workstation,
+										default_voice_duration: rd.default_voice_duration
 									})
 									.then((res) => {
 										let to_join = ['roomdisplay.command', org_addr, rd.id];
@@ -120,7 +121,7 @@ class Roomdisplay {
 		workstation
 	}) {
 		// console.log("RD MAKE PHRASE", ticket, workstation);
-		if (!ticket || !workstation || !ticket.label || !workstation.short_label && !workstation.device_label)
+		if (!ticket || !workstation || !ticket.label || _.isEmpty(ticket.label) || !(workstation.short_label || workstation.label) || _.isEmpty(workstation.short_label || workstation.label))
 			return Promise.resolve(false);
 		let parts = _.split(ticket.label, '-');
 		let letters = '';
@@ -147,10 +148,10 @@ class Roomdisplay {
 			return parse(rem, power - 1, fin);
 		};
 
-		let tick_numbers = _.uniq(_.filter(parse(number, this.number_speech_precision, [])));
-		let dir = workstation.short_label || _.last(_.words(workstation.device_label));
+		let tick_numbers = _.isNumber(number) ? _.uniq(_.filter(parse(number, this.number_speech_precision, []))) : [];
+		let dir = workstation.short_label || _.last(_.words(workstation.label));
 		dir = _.uniq(_.filter(parse(_.parseInt(dir), this.number_speech_precision, [])));
-		// console.log("DIR", dir, workstation.short_label);
+		// console.log("DIR", dir, workstation);
 		let fnames = _.flatten([this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, this.theme_params.direction, dir]);
 		let nm = _.join(_.map(fnames, (n) => _.last(_.split(n, "/"))), "_");
 		fnames = _.map(fnames, (n) => (n + this.theme_params.extension));
@@ -169,36 +170,21 @@ class Roomdisplay {
 
 	actionCallTicket({
 		ticket,
-		workstation
+		workstation,
+		default_voice_duration = 10
 	}) {
-		let tick;
-		let ws;
-		return Promise.props({
-				ticket: this.emitter.addTask('ticket', {
-					_action: 'ticket',
-					keys: ticket
-				}),
-				workstation: this.emitter.addTask('workstation', {
-					_action: 'by-id',
-					workstation
-				})
-			})
-			.then((res) => {
-				tick = _.find(res.ticket, (t) => (t.id == ticket));
-				ws = _.find(res.workstation, (t) => (t.id == workstation));
-				return this.actionMakeTicketPhrase({
-					ticket: tick,
-					workstation: ws
-				});
+		return this.actionMakeTicketPhrase({
+				ticket,
+				workstation
 			})
 			.then((name) => {
 				let fpath = name ? path.relative('/var/www/html/', name) : name;
 				fpath = this.data_server ? this.data_server + fpath : fpath;
 				return Promise.props({
-					ticket: tick,
-					workstation: ws,
+					ticket,
+					workstation,
 					voice: fpath,
-					voice_duration: this.getAudioLength(name, ws.default_voice_duration)
+					voice_duration: this.getAudioLength(name, default_voice_duration)
 				});
 			});
 	}
