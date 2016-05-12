@@ -152,7 +152,7 @@ class Roomdisplay {
 			return parse(rem, power - 1, fin);
 		};
 
-		let tick_numbers = _.isNumber(number) ? _.uniq(_.filter(parse(number, this.number_speech_precision, []))) : [];
+		let tick_numbers = _.isNumber(number) && !_.isNaN(number) ? _.uniq(_.filter(parse(number, this.number_speech_precision, []))) : [];
 		let dir = _.uniq(_.filter(parse(_.parseInt(wlabel), this.number_speech_precision, [])));
 		// console.log("DIR", dir, workstation);
 		let fnames = _.flatten([this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, this.theme_params.direction, dir]);
