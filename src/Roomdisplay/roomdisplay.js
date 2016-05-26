@@ -42,7 +42,7 @@ class Roomdisplay {
 	}
 
 	launch() {
-		this.emitter.on('roomdisplay.emit.ticket-call', ({
+		this.emitter.listenTask('roomdisplay.emit.ticket-call', ({
 			ticket,
 			workstation,
 			org_addr,
