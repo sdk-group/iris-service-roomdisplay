@@ -105,15 +105,43 @@ class Roomdisplay {
 		success
 	}) {
 		let status = success ? 'success' : 'fail';
-		// this.emitter.emit('history.log', {
-		// 	subject: {
-		// 		type: 'roomdisplay',
-		// 		id: user_id
-		// 	},
-		// 	object: ticket,
-		// 	event_name: `call-${status}`,
-		// 	reason: {}
-		// });
+		let event_name = 'call-played';
+		return Promise.props({
+				ticket: this.emitter.addTask('ticket', {
+						_action: 'ticket',
+						keys: [ticket]
+					})
+					.then(res => _.values(res)),
+				history: this.emitter.addTask('history', {
+					_action: 'make-entry',
+					subject: {
+						type: 'system',
+						id: user_id
+					},
+					object: ticket,
+					event_name,
+					reason: {}
+				})
+			})
+			.then(({
+				ticket,
+				history
+			}) => {
+				let tick = ticket[0];
+				history.local_time = moment()
+					.utcOffset(moment.parseZone(tick.booking_date)
+						.utcOffset())
+					.format();
+				tick.history.push(history);
+				console.log(tick);
+				return this.emitter.addTask('ticket', {
+					_action: 'set-ticket',
+					ticket: tick
+				});
+			})
+			.catch((err) => {
+				console.log('REPORT PLAYED ERR', err.message);
+			});
 	}
 
 	actionMakeTicketPhrase({
