@@ -128,6 +128,8 @@ class Roomdisplay {
 				history
 			}) => {
 				let tick = ticket[0];
+				if (_.find(tick.history, (e) => e.event_name == event_name))
+					return true;
 				history.local_time = moment()
 					.utcOffset(moment.parseZone(tick.booking_date)
 						.utcOffset())
