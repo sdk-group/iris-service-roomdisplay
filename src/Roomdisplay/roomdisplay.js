@@ -135,7 +135,6 @@ class Roomdisplay {
 						.utcOffset())
 					.format();
 				tick.history.push(history);
-				console.log(tick);
 				return this.emitter.addTask('ticket', {
 					_action: 'set-ticket',
 					ticket: tick
