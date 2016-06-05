@@ -106,6 +106,7 @@ class Roomdisplay {
 	}) {
 		let status = success ? 'success' : 'fail';
 		let event_name = 'call-played';
+		global.logger && logger.info("Roomdispay call for ticket %s played with result: %s", ticket, success);
 		return Promise.props({
 				ticket: this.emitter.addTask('ticket', {
 						_action: 'ticket',
@@ -139,9 +140,6 @@ class Roomdisplay {
 					_action: 'set-ticket',
 					ticket: tick
 				});
-			})
-			.catch((err) => {
-				console.log('REPORT PLAYED ERR', err.message);
 			});
 	}
 
