@@ -230,7 +230,7 @@ class Roomdisplay {
 				fpath = this.data_server ? this.data_server + fpath : fpath;
 				return Promise.props({
 					ticket,
-					workstation,
+					workstation: _.pick(workstation, ['label', 'short_label', 'device_placement']),
 					voice: fpath,
 					voice_duration: this.getAudioLength(name, default_voice_duration)
 				});
