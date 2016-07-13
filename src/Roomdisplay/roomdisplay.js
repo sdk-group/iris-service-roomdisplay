@@ -31,10 +31,9 @@ class Roomdisplay {
 			"okno": "окно",
 			"kabinet": "кабинет",
 			"kassa": "касса",
-			"vokno_smotrova": "пройдите_в_окно",
-			"vkabinet_kupryashin": "пройдитевкабинет",
-			"vokno_kupryashin": "пройдитевокно",
-			"vkassu_kupryashin": "пройдитевкассу"
+			"vokno": "пройдитевокно",
+			"vkabinet": "пройдитевкабинет",
+			"vkassu": "пройдитевкассу"
 		};
 		this.direction_types = _.mapValues(this.direction_types, (val) => `direction/${val}`);
 		this.number_speech_precision = number_speech_precision || 5;
