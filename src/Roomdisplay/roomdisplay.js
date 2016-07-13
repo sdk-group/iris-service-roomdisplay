@@ -208,7 +208,7 @@ class Roomdisplay {
 
 		return this.emitter.addTask("sound-conjunct", {
 			_action: "make-phrase",
-			sound_theme: sound_theme || this.sound_theme,
+			sound_theme: sound_theme,
 			sound_names: fnames,
 			outname
 		});
@@ -217,11 +217,13 @@ class Roomdisplay {
 	actionCallTicket({
 		ticket,
 		workstation,
+		sound_theme,
 		default_voice_duration = 10
 	}) {
 		return this.actionMakeTicketPhrase({
 				ticket,
-				workstation
+				workstation,
+				sound_theme: sound_theme || this.sound_theme
 			})
 			.then((name) => {
 				let fpath = name ? path.relative("/var/www/html/", name) : name;
