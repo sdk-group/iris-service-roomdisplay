@@ -58,6 +58,6 @@
 		"lodash": "^4.13.1",
 		"randomstring": "^1.1.5",
 		"resource-management-framework": "git+https://github.com/YuuKohaku/rmf-on-rdf.git",
-		"transliteration": "^1.1.5"
+		"transliteration": "^1.1.6"
 	}
 }
