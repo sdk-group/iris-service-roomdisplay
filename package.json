@@ -49,13 +49,13 @@
 		"gulp-watch": "^4.3.9"
 	},
 	"dependencies": {
-		"bluebird": "^3.4.3",
+		"bluebird": "^3.4.6",
 		"global-queue": "git+https://github.com/artificial-life/global-queue.git#experiments",
 		"gulp": "^3.9.1",
 		"gulp-babel": "^6.1.2",
-		"lodash": "^4.15.0",
+		"lodash": "^4.16.1",
 		"randomstring": "^1.1.5",
 		"resource-management-framework": "git+https://github.com/YuuKohaku/rmf-on-rdf.git",
-		"transliteration": "^1.1.7"
+		"transliteration": "^1.1.9"
 	}
 }
