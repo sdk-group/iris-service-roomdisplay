@@ -199,11 +199,11 @@ class Roomdisplay {
 		let fnames = _.flatten([this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, (ws_direction || this.theme_params.direction), dir]);
 		let nm = _.join(_.map(fnames, (n) => _.last(_.split(n, "/"))), "_");
 		fnames = _.map(fnames, (n) => (n + this.theme_params.extension));
-		let outname = slugify(nm, {
+		let outname = sound_theme + "_" + slugify(nm, {
 			lowercase: true,
 			separator: "_"
 		}) + this.theme_params.extension;
-		console.log(fnames);
+		console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n", fnames, outname);
 
 		return this.emitter.addTask("sound-conjunct", {
 			_action: "make-phrase",
