@@ -113,6 +113,7 @@ class Roomdisplay {
 	actionReportPlayed({
 		ticket,
 		user_id,
+		workstation,
 		success
 	}) {
 		let status = success ? "success" : "fail";
@@ -132,7 +133,10 @@ class Roomdisplay {
 					},
 					object: ticket,
 					event_name,
-					reason: {}
+					reason: {},
+					context: {
+						workstation
+					}
 				})
 			})
 			.then(({
