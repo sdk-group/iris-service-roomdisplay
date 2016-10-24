@@ -184,6 +184,8 @@ class Roomdisplay {
 		let tick_letters = _.split(_.lowerCase(letters), "");
 		let number = _.parseInt(numbers);
 		let parse = (num, power, fin) => {
+			if (!_.isNumber(num))
+				return fin;
 			// console.log("NUMPOW", num, power);
 			if (num < 20) {
 				fin.push(num);
@@ -199,7 +201,14 @@ class Roomdisplay {
 		};
 		let tick_numbers = _.isNumber(number) && !_.isNaN(number) ? _.uniq(_.filter(parse(number, this.number_speech_precision, []))) : [];
 		let dir = _.uniq(_.filter(parse(_.parseInt(wlabel), this.number_speech_precision, [])));
-		// console.log("DIR", dir, workstation);
+		let dir_letters = wlabel.replace(/[^a-zа-я]/gi, "");
+		console.log("DIRLETTERS", dir_letters);
+		if (!_.isEmpty(dir_letters)) {
+			dir_letters = dir_letters.toLowerCase()
+				.split("");
+			dir = dir.concat(dir_letters);
+		}
+		console.log("DIR", dir, workstation);
 		let fnames = _.flatten([this.theme_params.gong, this.theme_params.invitation, tick_letters, tick_numbers, (ws_direction || this.theme_params.direction), dir]);
 		let nm = _.join(_.map(fnames, (n) => _.last(_.split(n, "/"))), "_");
 		fnames = _.map(fnames, (n) => (n + this.theme_params.extension));
@@ -207,7 +216,6 @@ class Roomdisplay {
 			lowercase: true,
 			separator: "_"
 		}) + this.theme_params.extension;
-		console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n", fnames, outname);
 
 		return this.emitter.addTask("sound-conjunct", {
 			_action: "make-phrase",
@@ -229,6 +237,7 @@ class Roomdisplay {
 				sound_theme: sound_theme || this.sound_theme
 			})
 			.then((name) => {
+				console.log(name);
 				let fpath = name ? path.relative("/var/www/html/", name) : name;
 				fpath = this.data_server ? this.data_server + fpath : fpath;
 				return Promise.props({
