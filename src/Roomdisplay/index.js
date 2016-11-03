@@ -8,6 +8,7 @@ let tasks = [];
 
 module.exports = {
 	module: require('./roomdisplay.js'),
+	name: 'roomdisplay',
 	permissions: [],
 	exposed: true,
 	tasks: tasks,
