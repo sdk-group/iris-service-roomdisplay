@@ -119,42 +119,20 @@ class Roomdisplay {
 		let status = success ? "success" : "fail";
 		let event_name = "call-played";
 		global.logger && logger.info("Roomdispay call for ticket %s played with result: %s", ticket, success);
-		return Promise.props({
-				ticket: this.emitter.addTask("ticket", {
-						_action: "ticket",
-						keys: [ticket]
-					})
-					.then(res => _.values(res)),
-				history: this.emitter.addTask("history", {
-					_action: "make-entry",
-					subject: {
-						type: "system",
-						id: user_id
-					},
-					object: ticket,
-					event_name,
-					reason: {},
-					context: {
-						workstation
-					}
-				})
+		return this.emitter.addTask("ticket", {
+				_action: "ticket",
+				keys: [ticket]
 			})
-			.then(({
-				ticket,
-				history
-			}) => {
-				let tick = ticket[0];
-				if (_.find(tick.history, (e) => e.event_name == event_name))
-					return true;
-				history.local_time = moment()
-					.utcOffset(moment.parseZone(tick.booking_date)
-						.utcOffset())
-					.format();
-				tick.history.push(history);
-				return this.emitter.addTask("ticket", {
-					_action: "set-ticket",
-					ticket: tick
-				});
+			.then(res => ({
+				success: true,
+				ticket: _.head(res)
+			}))
+			.catch(err => {
+				global.logger && logger.error("Roomdispay call record for ticket %s errored:", err);
+				return {
+					success: false,
+					reason: err.message
+				};
 			});
 	}
 
