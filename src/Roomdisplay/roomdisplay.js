@@ -125,7 +125,7 @@ class Roomdisplay {
 			})
 			.then(res => ({
 				success: true,
-				ticket: _.head(res)
+				ticket: _.head(_.values(res))
 			}))
 			.catch(err => {
 				global.logger && logger.error("Roomdispay call record for ticket %s errored:", err);
